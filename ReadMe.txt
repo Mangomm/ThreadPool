@@ -1,0 +1,3 @@
+编写线程池时遇到的问题：
+1）threadpool_thread中，为空时的条件变量.wait时，不能添加参2lambda表达式。否则会造成卡死。
+2）模拟客户端请求的任务20个,注意添加任务时num数组也要添加，否则导致m_threads在joinable会保存未知错误，导致我找了一晚上~shift。

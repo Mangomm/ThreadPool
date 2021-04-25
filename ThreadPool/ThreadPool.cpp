@@ -320,11 +320,15 @@ void *adjust_thread(void *threadpool)
 		//清理本次因空闲而结束线程内存
 		std::unique_lock<std::mutex> uGarbage(pool->m_garbage_lock);
 		if (!pool->m_garbage.empty()) {
-			for (auto it = pool->m_garbage.begin(); it != pool->m_garbage.end(); it++) {
+			for (auto it = pool->m_garbage.begin(); it != pool->m_garbage.end(); it++) 
+			{
 				if ((*it) != NULL) {
-					std::cout << "线程内存被回收" << std::endl;
-					//delete *it;//thread不能被手动或者智能指针delete,否则报错.它是会被自动回收？
-					*it = NULL;
+					if (((*it)->joinable())) {
+						std::cout << "空闲线程内存被回收,tid=" << (*it)->get_id() << std::endl;
+						(*it)->join();			//即使线程函数已经结束,也要join，否则报abort中断异常错误
+						delete *it;
+						*it = NULL;
+					}
 				}
 			}
 			pool->m_garbage.clear();//一次清除比多次erase效率快

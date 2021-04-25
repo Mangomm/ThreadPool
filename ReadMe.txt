@@ -103,4 +103,5 @@ int main(int argc, char const *argv[]){
 地址进行处理，例如这里的*_thread线程指针。
 即vector自己分配的内容被删除后，不要再使用vector自己分配的内容。
 
-5)new出来的thread不能手动delete，并且使用智能指针new时，在自动回收也会报错。它是会自动回收？这个问题暂时未解决。
+5)new出来的thread不能直接手动delete，并且使用智能指针new时，在自动回收也会报错。它是会自动回收？
+原因是即使线程函数结束，我们在回收的时候也要join(我之前delete时没有join)，否则delete会报terminate()回收内存失败，导致抛出abort()中断异常。

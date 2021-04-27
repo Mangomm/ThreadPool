@@ -27,17 +27,26 @@ int main() {
 	//2 模拟客户端请求的任务50个
 	//注意添加任务时num数组大小也要改变，否则导致m_threads在joinable会保存未知错误，导致我找了一晚上~日了
 	int num[300], i;
-	for (i = 0; i < 300; i++) {
+	int r;
+	srand(time(NULL));
+Task:
+	r = rand() % 300;
+	for (i = 0; i < r; i++) {
 		num[i] = i;
 		printf("add task %d\n", i);
 		pool.threadpool_add(process, (void*)&num[i]);					/* 向线程池中添加任务 */
 	}
 
+	printf("执行完一次任务,任务数=%d\n", i + 1);
+	//std::this_thread::sleep_for(std::chrono::milliseconds(2000));	//模拟线程池一直有任务.测试半个小时左右，稳定且数据正确
+	std::this_thread::sleep_for(std::chrono::milliseconds(15000));	//模拟线程池任务为空或者不为空的情况.更加方便测试管理线程的代码.测试半个小时左右，稳定且数据正确
+	goto Task;
+
+
 	int busyNum = pool.threadpool_busy_threadnum();
 	std::cout << "BusyNum = " << busyNum << std::endl;
 	int allThrNum = pool.threadpool_all_threadnum();
 	std::cout << "allThrNum = " << allThrNum << std::endl;
-
 
 	//3 等子线程完成任务
 	std::this_thread::sleep_for(std::chrono::milliseconds(10000));		/* 等子线程完成任务 */                         

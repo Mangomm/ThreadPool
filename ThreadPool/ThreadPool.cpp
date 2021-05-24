@@ -122,7 +122,7 @@ bool CThreadPool::threadpool_create(int min_thr_num, int max_thr_num, int queue_
 	m_live_thr_num = min_thr_num;
 
 	/* 队列开辟空间 */
-	this->m_task_queue = (threadpool_task_t *)new threadpool_task_t[sizeof(threadpool_task_t)*queue_max_size];
+	this->m_task_queue = (threadpool_task_t *)new threadpool_task_t[queue_max_size];
 	if (this->m_task_queue == NULL) {
 		printf("new task_queue fail.\n");
 		return NULL;

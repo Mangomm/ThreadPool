@@ -37,9 +37,10 @@ Task:
 		pool.threadpool_add(process, (void*)&num[i]);					/* 向线程池中添加任务 */
 	}
 
-	printf("执行完一次任务,任务数=%d\n", i + 1);
-	//std::this_thread::sleep_for(std::chrono::milliseconds(2000));	//模拟线程池一直有任务.测试半个小时左右，稳定且数据正确
-	std::this_thread::sleep_for(std::chrono::milliseconds(15000));	//模拟线程池任务为空或者不为空的情况.更加方便测试管理线程的代码.测试半个小时左右，稳定且数据正确
+	//双向队列大小的求法：(q->rear - q->front + MAXSIZE) % MAXSIZE;
+	printf("添加完一次任务,任务数=%d, 即0 ~ %d\n", r, r - 1);
+	std::this_thread::sleep_for(std::chrono::milliseconds(2000));	//模拟线程池一直有任务.测试半个小时左右，稳定且数据正确
+	//std::this_thread::sleep_for(std::chrono::milliseconds(15000));	//模拟线程池任务为空或者不为空的情况.更加方便测试管理线程的代码.测试半个小时左右，稳定且数据正确
 	goto Task;
 
 
